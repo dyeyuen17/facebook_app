@@ -22,6 +22,10 @@ config :logger, :console,
   format: "$time $metadata[$level] $message\n",
   metadata: [:request_id]
 
+config :facebook_app, FacebookAppWeb.Helpers.Plugs.Guardian,
+  issuer: "facebook_app",
+  secret_key: "gf7ip/WlWTVYLAynMRjQyYeut0c/ugOr7PN9PDqHtlxYRF0RTpfe2dnvC5mgQzGW"
+
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{Mix.env}.exs"
