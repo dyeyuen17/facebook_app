@@ -14,4 +14,8 @@ defmodule FacebookAppWeb.ReactionView do
     %{id: reaction.id,
       reaction: reaction.reaction}
   end
+
+  def render("post_reaction.json", %{reactions: reactions}) do
+    %{data: render_many(reactions, ReactionView, "reaction.json")}
+  end
 end

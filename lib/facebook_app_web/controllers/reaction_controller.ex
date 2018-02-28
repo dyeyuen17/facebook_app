@@ -11,18 +11,20 @@ defmodule FacebookAppWeb.ReactionController do
     render(conn, "index.json", reactions: reactions)
   end
 
-  def create(conn, %{"reaction" => reaction_params}) do
-    with {:ok, %Reaction{} = reaction} <- Actions.create_reaction(reaction_params) do
+  def react(conn, %{"reaction" => reaction_params, "post_id" => post_id}) do
+    user = conn.assigns.current_user
+    id = post_id |> String.to_integer
+    with {:ok, %Reaction{} = reaction} <- Actions.create_reaction(reaction_params, user, id) do
       conn
       |> put_status(:created)
-      |> put_resp_header("location", reaction_path(conn, :show, reaction))
       |> render("show.json", reaction: reaction)
     end
   end
 
-  def show(conn, %{"id" => id}) do
-    reaction = Actions.get_reaction!(id)
-    render(conn, "show.json", reaction: reaction)
+  def get_post_reactions(conn, %{"post_id" => post_id}) do
+    id = post_id |> String.to_integer
+    reactions = Actions.get_posts_reaction!(id)
+    render(conn, "post_reaction.json", reactions: reactions)
   end
 
   def update(conn, %{"id" => id, "reaction" => reaction_params}) do

@@ -5,7 +5,7 @@ defmodule FacebookApp.Accounts.Profile do
   alias FacebookApp.Accounts.User
 
   schema "profiles" do
-    field :avatar, :string
+    field :avatar, :string, null: true
     field :first_name, :string
     field :last_name, :string
     belongs_to :user, User

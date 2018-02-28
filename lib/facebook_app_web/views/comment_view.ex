@@ -14,4 +14,8 @@ defmodule FacebookAppWeb.CommentView do
     %{id: comment.id,
       content: comment.content}
   end
+
+  def render("post_comment.json", %{comments: comments}) do
+    %{data: render_many(comments, CommentView, "comment.json")}
+  end
 end

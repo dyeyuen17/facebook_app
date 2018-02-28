@@ -21,12 +21,13 @@ defmodule FacebookAppWeb.UserView do
   end
 
   def render("users.json", %{user: user}) do
+    # require IEx
+    # IEx.pry()
     %{id: user.id,
       email: user.email,
       posts: render_many(user.posts, PostView, "post.json"),
-      comments: render_many(user.comments, CommentView, "comment.json"),
-      reactions: render_many(user.reactions, ReactionView, "reaction.json"),
-      profile: render_one(user.profile, ProfileView, "profile.json" )
+      profile: render_one(user.profile, ProfileView, "profile.json")
+      # profile: render_one(user.profile, user, ProfileView, "users_profile.json")
     }
   end
 

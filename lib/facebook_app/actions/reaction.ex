@@ -5,6 +5,8 @@ defmodule FacebookApp.Actions.Reaction do
   alias FacebookApp.Actions.Post
   alias FacebookApp.Accounts.User
 
+  @reactions ~w(like haha heart shookt angry poop)
+
   schema "reactions" do
     field :reaction, :string
     belongs_to :post, Post
@@ -20,5 +22,7 @@ defmodule FacebookApp.Actions.Reaction do
     |> validate_required([:reaction])
     |> assoc_constraint(:user)
     |> assoc_constraint(:post)
+    |> validate_inclusion(:reaction, @reactions)
+
   end
 end

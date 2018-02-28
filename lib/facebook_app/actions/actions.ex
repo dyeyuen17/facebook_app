@@ -146,6 +146,15 @@ defmodule FacebookApp.Actions do
   """
   def get_comment!(id), do: Repo.get!(Comment, id)
 
+
+
+  def get_posts_commment!(post_id) do
+    Comment
+      |> where([p], p.post_id == ^post_id)
+      |> Repo.all()
+      |> Repo.preload(:user)
+  end
+
   @doc """
   Creates a comment.
 
@@ -158,8 +167,8 @@ defmodule FacebookApp.Actions do
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_comment(attrs \\ %{}) do
-    %Comment{}
+  def create_comment(attrs \\ %{}, post_id, user) do
+    %Comment{post_id: post_id, user_id: user.id}
     |> Comment.changeset(attrs)
     |> Repo.insert()
   end
@@ -242,6 +251,13 @@ defmodule FacebookApp.Actions do
   """
   def get_reaction!(id), do: Repo.get!(Reaction, id)
 
+
+  def get_posts_reaction!(post_id) do
+    Reaction
+      |> where([p], p.post_id == ^post_id)
+      |> Repo.all()
+      |> Repo.preload(:user)
+  end
   @doc """
   Creates a reaction.
 
@@ -254,8 +270,8 @@ defmodule FacebookApp.Actions do
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_reaction(attrs \\ %{}) do
-    %Reaction{}
+  def create_reaction(attrs \\ %{}, user, post_id) do
+    %Reaction{user_id: user.id, post_id: post_id}
     |> Reaction.changeset(attrs)
     |> Repo.insert()
   end

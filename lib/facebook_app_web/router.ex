@@ -15,8 +15,6 @@ defmodule FacebookAppWeb.Router do
 
     post "/login", UserController, :login
     post "/register", UserController, :register
-    get "/users", UserController, :index
-    get "/posts", PostController, :index
 
   end
 
@@ -30,11 +28,13 @@ defmodule FacebookAppWeb.Router do
 
     get "/my/profile", ProfileController, :get_user_profile
     get "/my/posts", PostController, :get_user_posts
-    get "/posts/comments", CommentController, :get_post_comments
-    get "/posts/reactions", ReactionController, :get_post_reactions
+    get "/:post_id/comments", CommentController, :get_post_comments
+    get "/:post_id/reactions", ReactionController, :get_post_reactions
 
     get "/logout", UserController, :logout
 
+    get "/posts", PostController, :index
+    get "/users", UserController, :index
   end
 
 end

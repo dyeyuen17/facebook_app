@@ -16,4 +16,17 @@ defmodule FacebookAppWeb.ProfileView do
       last_name: profile.last_name,
       avatar: profile.avatar}
   end
+
+  def render("user_profile.json", %{profile: [profile] , user: user}) do
+    %{data: render_one(profile, user, ProfileView, "users_profile.json")}
+  end
+
+  def render("users_profile.json", %{profile: [profile], user: user}) do
+    %{id: profile.id,
+      first_name: profile.first_name,
+      last_name: profile.last_name,
+      avatar: profile.avatar,
+      email: user.email
+    }
+  end
 end

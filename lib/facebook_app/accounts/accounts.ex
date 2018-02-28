@@ -19,7 +19,7 @@ defmodule FacebookApp.Accounts do
   """
   def list_users do
     Repo.all(User)
-    |> Repo.preload([:posts, :comments, :reactions, :profile])
+    |> Repo.preload([:profile, posts: [:comments, :reactions]])
 
   end
 
@@ -40,7 +40,7 @@ defmodule FacebookApp.Accounts do
   def get_user!(id) do
     User
       |> Repo.get!(id)
-      |> Repo.preload([:posts, :comments, :reactions, :profile])
+      |> Repo.preload([:posts, :reactions, :profile])
   end
 
   def get_user_by_email(email) do
@@ -144,6 +144,14 @@ defmodule FacebookApp.Accounts do
   """
   def get_profile!(id), do: Repo.get!(Profile, id)
 
+
+  def get_users_profile!(user) do
+    Profile
+      |> where([p], p.user_id == ^user.id)
+      |> Repo.all()
+      |> Repo.preload(:user)
+  end
+
   @doc """
   Creates a profile.
 
@@ -156,8 +164,8 @@ defmodule FacebookApp.Accounts do
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_profile(attrs \\ %{}) do
-    %Profile{}
+  def create_profile(attrs \\ %{}, user) do
+    %Profile{user_id: user.id}
     |> Profile.changeset(attrs)
     |> Repo.insert()
   end
