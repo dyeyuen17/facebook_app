@@ -11,10 +11,12 @@ defmodule FacebookAppWeb.ProfileView do
   end
 
   def render("profile.json", %{profile: profile}) do
-    %{id: profile.id,
+    %{
+      id: profile.id,
       first_name: profile.first_name,
       last_name: profile.last_name,
-      avatar: profile.avatar}
+      avatar: profile.avatar
+    }
   end
 
   def render("user_profile.json", %{profile: [profile] , user: user}) do
