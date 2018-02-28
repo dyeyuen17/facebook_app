@@ -20,7 +20,7 @@ defmodule FacebookApp.Actions do
   """
   def list_posts do
     Repo.all(Post)
-      |> Repo.preload([:comments, :reactions])
+      |> Repo.preload([:comments, :reactions, user: [:profile]])
   end
 
   @doc """
