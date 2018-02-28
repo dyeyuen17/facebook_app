@@ -17,7 +17,7 @@ defmodule FacebookApp.Accounts.Profile do
   def changeset(%Profile{} = profile, attrs) do
     profile
     |> cast(attrs, [:first_name, :last_name, :avatar])
-    |> validate_required([:first_name, :last_name, :avatar])
+    |> validate_required([:first_name, :last_name])
     |> assoc_constraint(:user)
   end
 end
