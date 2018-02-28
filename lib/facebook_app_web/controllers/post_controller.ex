@@ -12,7 +12,7 @@ defmodule FacebookAppWeb.PostController do
     render(conn, "index.json", posts: posts)
   end
 
-  def create_post(conn, %{"post" => post_params}) do
+  def create(conn, %{"post" => post_params}) do
     with {:ok, %Post{} = post} <- Actions.create_post(post_params, conn.assigns.current_user) do
       conn
       |> put_status(:created)
@@ -20,10 +20,9 @@ defmodule FacebookAppWeb.PostController do
     end
   end
 
-  def get_user_posts(conn, _) do
-    user = conn.assigns.current_user
-    posts = Actions.get_users_post!(user)
-    render(conn, "user_posts.json", posts: posts)
+  def show(conn, %{"id" => id}) do
+    post = Actions.get_post!(id)
+    render(conn, "show.json", post: post)
   end
 
   def update(conn, %{"id" => id, "post" => post_params}) do
