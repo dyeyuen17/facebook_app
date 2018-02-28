@@ -66,7 +66,7 @@ defmodule FacebookApp.Actions do
     changeset = %Post{user_id: user.id}
       |> Post.changeset(attrs)
     with {:ok, post} <- Repo.insert(changeset) do
-      {:ok, post |> Repo.preload([:comments, :reactions])}
+      {:ok, post |> Repo.preload([:comments, :reactions, user: [:profile]])}
     end
 
   end
