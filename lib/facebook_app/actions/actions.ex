@@ -171,9 +171,11 @@ defmodule FacebookApp.Actions do
 
   """
   def create_comment(attrs \\ %{}, post_id, user) do
-    %Comment{post_id: post_id, user_id: user.id}
+    changeset = %Comment{post_id: post_id, user_id: user.id}
     |> Comment.changeset(attrs)
-    |> Repo.insert()
+    with {:ok, comment} <- Repo.insert(changeset) do
+      {:ok, comment |> Repo.preload(user: [:profile])}
+    end
   end
 
   @doc """
