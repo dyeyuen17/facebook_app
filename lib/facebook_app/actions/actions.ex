@@ -63,9 +63,12 @@ defmodule FacebookApp.Actions do
 
   """
   def create_post(attrs \\ %{}, user) do
-    %Post{user_id: user.id}
-    |> Post.changeset(attrs)
-    |> Repo.insert()
+    changeset = %Post{user_id: user.id}
+      |> Post.changeset(attrs)
+    with {:ok, post} <- Repo.insert(changeset) do
+      {:ok, post |> Repo.preload([:comments, :reactions])}
+    end
+
   end
 
   @doc """
