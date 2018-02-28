@@ -11,16 +11,7 @@ defmodule FacebookAppWeb.ProfileController do
     render(conn, "index.json", profiles: profiles)
   end
 
-  def create_profile(conn, %{"profile" => profile_params}) do
-    user = conn.assigns.current_user
-    with {:ok, %Profile{} = profile} <- Accounts.create_profile(profile_params, user) do
-      conn
-      |> put_status(:created)
-      |> render("show.json", profile: profile)
-    end
-  end
-
-  def get_user_profile(conn, _params) do
+  def show(conn, _params) do
     user = conn.assigns.current_user
     profile = Accounts.get_users_profile!(user)
     render(conn, "users_profile.json", profile: profile, user: user)
@@ -28,7 +19,7 @@ defmodule FacebookAppWeb.ProfileController do
 
   def update(conn, %{"id" => id, "profile" => profile_params}) do
     profile = Accounts.get_profile!(id)
-
+  
     with {:ok, %Profile{} = profile} <- Accounts.update_profile(profile, profile_params) do
       render(conn, "show.json", profile: profile)
     end
