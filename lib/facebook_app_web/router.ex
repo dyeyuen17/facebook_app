@@ -22,15 +22,14 @@ defmodule FacebookAppWeb.Router do
     pipe_through [:api, :authentication]
     resources("/posts", PostController, except: [:new, :edit]) do
       resources("/comments", CommentController, except: [:new, :edit])
+      resources("/reactions", ReactionController, except: [:new, :edit])
     end
 
-    post "/profile", ProfileController, :create_profile
-    post "/:post_id/react", ReactionController, :react
+    resources "/profile", ProfileController, except: [:new, :edit, :create]
 
-    get "/my/profile", ProfileController, :get_user_profile
     get "/logout", UserController, :logout
-
     get "/users", UserController, :index
+
   end
 
 end
