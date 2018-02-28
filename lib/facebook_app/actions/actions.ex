@@ -155,7 +155,7 @@ defmodule FacebookApp.Actions do
     Comment
       |> where([p], p.post_id == ^post_id)
       |> Repo.all()
-      |> Repo.preload(:user)
+      |> Repo.preload(user: [:profile])
   end
 
   @doc """
