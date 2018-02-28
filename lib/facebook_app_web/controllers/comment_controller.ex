@@ -11,7 +11,7 @@ defmodule FacebookAppWeb.CommentController do
     render(conn, "index.json", comments: comments)
   end
 
-  def create_comment(conn, %{"comment" => comment_params, "post_id" => post_id}) do
+  def create(conn, %{"comment" => comment_params, "post_id" => post_id}) do
     user = conn.assigns.current_user
     id = post_id |> String.to_integer
     with {:ok, %Comment{} = comment} <- Actions.create_comment(comment_params, id, user) do
@@ -21,7 +21,7 @@ defmodule FacebookAppWeb.CommentController do
     end
   end
 
-  def get_post_comments(conn, %{"post_id" => post_id}) do
+  def show(conn, %{"post_id" => post_id}) do
     id = post_id |> String.to_integer
     comments = Actions.get_posts_commment!(id)
     render(conn, "post_comment.json", comments: comments)
