@@ -21,7 +21,7 @@ defmodule FacebookAppWeb.CommentController do
     end
   end
 
-  def show(conn, %{"post_id" => post_id}) do
+  def show(conn, %{"post_id" => post_id, "id" => _id}) do
     id = post_id |> String.to_integer
     comments = Actions.get_posts_commment!(id)
     render(conn, "post_comment.json", comments: comments)
