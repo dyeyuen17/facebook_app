@@ -24,7 +24,7 @@ config :logger, :console,
 
 config :facebook_app, FacebookAppWeb.Helpers.Plugs.Guardian,
   issuer: "facebook_app",
-  secret_key: "gf7ip/WlWTVYLAynMRjQyYeut0c/ugOr7PN9PDqHtlxYRF0RTpfe2dnvC5mgQzGW"
+  secret_key: "yY41GR16m+gxixd+3/6RruhwUocGywlx5ncDaCWK8aRbWvTzhhSv429jma6rmnST"
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.

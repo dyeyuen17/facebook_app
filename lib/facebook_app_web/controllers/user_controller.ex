@@ -11,32 +11,26 @@ defmodule FacebookAppWeb.UserController do
     render(conn, "index.json", users: users)
   end
 
-  def create(conn, %{"user" => user_params}) do
+  def register(conn, %{"user" => user_params}) do
     with {:ok, %User{} = user} <- Accounts.create_user(user_params) do
       conn
       |> put_status(:created)
-      |> put_resp_header("location", user_path(conn, :show, user))
       |> render("show.json", user: user)
     end
   end
 
-  def show(conn, %{"id" => id}) do
-    user = Accounts.get_user!(id)
-    render(conn, "show.json", user: user)
-  end
-
-  def update(conn, %{"id" => id, "user" => user_params}) do
-    user = Accounts.get_user!(id)
-
-    with {:ok, %User{} = user} <- Accounts.update_user(user, user_params) do
-      render(conn, "show.json", user: user)
+  def login(conn, %{"user" => user_params}) do
+    user = Accounts.get_user_by_email(user_params["email"])
+    case Comeonin.Bcrypt.checkpw(user_params["password"], user.password) do
+      true ->
+        {:ok, token, _claims} = FacebookAppWeb.Helpers.Plugs.Guardian.encode_and_sign(user)
+        render(conn, "auth.json", user: user, token: token)
     end
   end
 
-  def delete(conn, %{"id" => id}) do
-    user = Accounts.get_user!(id)
-    with {:ok, %User{}} <- Accounts.delete_user(user) do
-      send_resp(conn, :no_content, "")
-    end
+  def logout(conn, _params) do
+    FacebookAppWeb.Helpers.Plugs.Guardian.Plug.sign_out(conn)
+    send_resp(conn, :no_content, "")
   end
+
 end

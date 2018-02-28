@@ -3,6 +3,7 @@ defmodule FacebookAppWeb.PostController do
 
   alias FacebookApp.Actions
   alias FacebookApp.Actions.Post
+  alias FacebookApp.Accounts
 
   action_fallback FacebookAppWeb.FallbackController
 
@@ -11,18 +12,18 @@ defmodule FacebookAppWeb.PostController do
     render(conn, "index.json", posts: posts)
   end
 
-  def create(conn, %{"post" => post_params}) do
-    with {:ok, %Post{} = post} <- Actions.create_post(post_params) do
+  def create_post(conn, %{"post" => post_params}) do
+    with {:ok, %Post{} = post} <- Actions.create_post(post_params, conn.assigns.current_user) do
       conn
       |> put_status(:created)
-      |> put_resp_header("location", post_path(conn, :show, post))
       |> render("show.json", post: post)
     end
   end
 
-  def show(conn, %{"id" => id}) do
-    post = Actions.get_post!(id)
-    render(conn, "show.json", post: post)
+  def get_user_posts(conn, _) do
+    user = conn.assigns.current_user
+    posts = Actions.get_users_post!(user)
+    render(conn, "user_posts.json", posts: posts)
   end
 
   def update(conn, %{"id" => id, "post" => post_params}) do

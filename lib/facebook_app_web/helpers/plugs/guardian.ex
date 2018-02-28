@@ -1,6 +1,6 @@
 defmodule FacebookAppWeb.Helpers.Plugs.Guardian do
-  use Guardian, otp_app: :apis
-	alias Apis.Accounts
+  use Guardian, otp_app: :facebook_app
+	alias FacebookApp.Accounts
 
   def subject_for_token(resource, _claims) do
     # You can use any value for the subject of your token but

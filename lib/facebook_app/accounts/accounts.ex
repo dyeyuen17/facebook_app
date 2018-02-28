@@ -19,6 +19,8 @@ defmodule FacebookApp.Accounts do
   """
   def list_users do
     Repo.all(User)
+    |> Repo.preload([:posts, :comments, :reactions, :profile])
+
   end
 
   @doc """
@@ -35,8 +37,17 @@ defmodule FacebookApp.Accounts do
       ** (Ecto.NoResultsError)
 
   """
-  def get_user!(id), do: Repo.get!(User, id)
+  def get_user!(id) do
+    User
+      |> Repo.get!(id)
+      |> Repo.preload([:posts, :comments, :reactions, :profile])
+  end
 
+  def get_user_by_email(email) do
+    User
+      |> where([u], u.email == ^email)
+      |> Repo.one()
+  end
   @doc """
   Creates a user.
 
@@ -197,4 +208,5 @@ defmodule FacebookApp.Accounts do
   def change_profile(%Profile{} = profile) do
     Profile.changeset(profile, %{})
   end
+
 end

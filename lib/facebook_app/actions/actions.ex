@@ -7,6 +7,7 @@ defmodule FacebookApp.Actions do
   alias FacebookApp.Repo
 
   alias FacebookApp.Actions.Post
+  alias FacebookApp.Accounts.User
 
   @doc """
   Returns the list of posts.
@@ -19,6 +20,7 @@ defmodule FacebookApp.Actions do
   """
   def list_posts do
     Repo.all(Post)
+      |> Repo.preload([:comments, :reactions])
   end
 
   @doc """
@@ -35,7 +37,18 @@ defmodule FacebookApp.Actions do
       ** (Ecto.NoResultsError)
 
   """
-  def get_post!(id), do: Repo.get!(Post, id)
+  def get_post!(id) do
+    Post
+     |> Repo.get!(id)
+     |> Repo.preload([:comments, :reactions])
+  end
+
+  def get_users_post!(user) do
+    Post
+      |> where([p], p.user_id == ^user.id)
+      |> Repo.all()
+      |> Repo.preload([:comments, :reactions, :user])
+  end
 
   @doc """
   Creates a post.
@@ -49,8 +62,8 @@ defmodule FacebookApp.Actions do
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_post(attrs \\ %{}) do
-    %Post{}
+  def create_post(attrs \\ %{}, user) do
+    %Post{user_id: user.id}
     |> Post.changeset(attrs)
     |> Repo.insert()
   end
