@@ -40,7 +40,7 @@ defmodule FacebookApp.Actions do
   def get_post!(id) do
     Post
      |> Repo.get!(id)
-     |> Repo.preload([:comments, :reactions])
+     |> Repo.preload([:comments, :reactions, user: [:profile]])
   end
 
   def get_users_post!(user) do
