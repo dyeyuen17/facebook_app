@@ -61,10 +61,14 @@ defmodule FacebookApp.Accounts do
 
   """
   def create_user(attrs \\ %{}) do
-    %User{}
+    {:ok, user} = %User{}
     |> User.changeset(attrs)
     |> Repo.insert()
+
+    create_profile(attrs, user)
+    {:ok, user |> Repo.preload(:profile)}
   end
+
 
   @doc """
   Updates a user.
