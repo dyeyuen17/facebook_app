@@ -3,6 +3,7 @@ defmodule FacebookAppWeb.PostView do
   alias FacebookAppWeb.PostView
   alias FacebookAppWeb.CommentView
   alias FacebookAppWeb.ReactionView
+  alias FacebookAppWeb.UserView
 
   def render("index.json", %{posts: posts}) do
     %{data: render_many(posts, PostView, "post.json")}
@@ -14,10 +15,8 @@ defmodule FacebookAppWeb.PostView do
   end
 
   def render("post.json", %{post: post}) do
-    # require IEx
-    # IEx.pry()
     %{id: post.id,
-      user_id: post.user_id,
+      user: render_one(post.user, UserView, "user.json"),
       content: post.content,
       comments: render_many(post.comments, CommentView, "comment.json"),
       reactions: render_many(post.reactions, ReactionView, "reaction.json")
