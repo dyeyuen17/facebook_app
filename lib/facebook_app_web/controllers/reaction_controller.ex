@@ -11,7 +11,7 @@ defmodule FacebookAppWeb.ReactionController do
     render(conn, "index.json", reactions: reactions)
   end
 
-  def react(conn, %{"reaction" => reaction_params, "post_id" => post_id}) do
+  def create(conn, %{"reaction" => reaction_params, "post_id" => post_id}) do
     user = conn.assigns.current_user
     id = post_id |> String.to_integer
     with {:ok, %Reaction{} = reaction} <- Actions.create_reaction(reaction_params, user, id) do
@@ -21,7 +21,7 @@ defmodule FacebookAppWeb.ReactionController do
     end
   end
 
-  def get_post_reactions(conn, %{"post_id" => post_id}) do
+  def show(conn, %{"post_id" => post_id, "id" => _id}) do
     id = post_id |> String.to_integer
     reactions = Actions.get_posts_reaction!(id)
     render(conn, "post_reaction.json", reactions: reactions)
