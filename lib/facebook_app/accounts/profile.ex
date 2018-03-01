@@ -3,9 +3,10 @@ defmodule FacebookApp.Accounts.Profile do
   import Ecto.Changeset
   alias FacebookApp.Accounts.Profile
   alias FacebookApp.Accounts.User
+  alias FacebookApp.Accounts.Idcon
 
   schema "profiles" do
-    field :avatar, :string, null: true
+    field :avatar, :string
     field :first_name, :string
     field :last_name, :string
     belongs_to :user, User
@@ -19,5 +20,17 @@ defmodule FacebookApp.Accounts.Profile do
     |> cast(attrs, [:first_name, :last_name, :avatar])
     |> validate_required([:first_name, :last_name])
     |> assoc_constraint(:user)
+    |> avatar_path(attrs)
+  end
+
+  defp avatar_path(changeset, attrs) do
+
+    case changeset do
+      %Ecto.Changeset{valid?: true, changes: %{first_name: first_name}} ->
+        put_change(changeset, :avatar, Idcon.gen_idcon_path(attrs["email"]))
+      _ ->
+        changeset
+    end
+
   end
 end

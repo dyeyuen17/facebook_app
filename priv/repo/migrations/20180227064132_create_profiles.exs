@@ -5,7 +5,7 @@ defmodule FacebookApp.Repo.Migrations.CreateProfiles do
     create table(:profiles) do
       add :first_name, :string
       add :last_name, :string
-      add :avatar, :binary
+      add :avatar, :string
       add :user_id, references(:users, on_delete: :nothing)
 
       timestamps()
