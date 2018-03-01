@@ -5,7 +5,7 @@ defmodule FacebookApp.Actions.Reaction do
   alias FacebookApp.Actions.Post
   alias FacebookApp.Accounts.User
 
-  @reactions ~w(like haha heart shookt angry poop)
+  @reactions ~w(like haha love shookt angry sad wow)
 
   schema "reactions" do
     field :reaction, :string
