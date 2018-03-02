@@ -1,5 +1,6 @@
 defmodule FacebookAppWeb.ProfileController do
   use FacebookAppWeb, :controller
+  import Plug.Conn
 
   alias FacebookApp.Accounts
   alias FacebookApp.Accounts.Profile
@@ -47,4 +48,11 @@ defmodule FacebookAppWeb.ProfileController do
     render(conn, "show.json", profile: h)
 
   end
+
+  def primary(conn, %{"img_file" => img_file}) do
+    # user = conn.assigns.current_user
+    # [h | _t] = Accounts.get_users_profile!(user)
+    send_file(conn, 200, "media/avatar/#{img_file}")
+  end
+
 end

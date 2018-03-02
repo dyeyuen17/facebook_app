@@ -16,6 +16,8 @@ defmodule FacebookAppWeb.Router do
     post "/login", UserController, :login
     post "/register", UserController, :register
 
+    get "/uploads/media/avatar/:img_file", ProfileController, :primary
+
   end
 
   scope "/api", FacebookAppWeb do
@@ -28,6 +30,8 @@ defmodule FacebookAppWeb.Router do
     resources "/profile", ProfileController, except: [:new, :edit, :create]
 
     post "/uploads", ProfileController, :upload
+
+
 
     get "/logout", UserController, :logout
     get "/users", UserController, :index
