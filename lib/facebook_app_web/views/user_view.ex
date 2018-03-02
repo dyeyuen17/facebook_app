@@ -31,7 +31,8 @@ defmodule FacebookAppWeb.UserView do
 
   def render("auth.json", %{user: user, token: token}) do
     %{email: user.email,
-      token: token
+      token: token,
+      profile: render_one(user.profile, ProfileView, "profile.json")
     }
   end
 

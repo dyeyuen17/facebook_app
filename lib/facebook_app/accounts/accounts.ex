@@ -47,6 +47,7 @@ defmodule FacebookApp.Accounts do
     User
       |> where([u], u.email == ^email)
       |> Repo.one()
+      |> Repo.preload(:profile)
   end
   @doc """
   Creates a user.
