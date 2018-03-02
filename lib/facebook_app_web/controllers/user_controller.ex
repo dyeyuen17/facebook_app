@@ -33,4 +33,9 @@ defmodule FacebookAppWeb.UserController do
     send_resp(conn, :no_content, "")
   end
 
+  def current_user(conn, _params) do
+    user = conn.assigns.current_user
+    render(conn, "show.json", user: user)
+  end
+
 end

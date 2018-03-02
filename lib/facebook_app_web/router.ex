@@ -31,7 +31,7 @@ defmodule FacebookAppWeb.Router do
 
     post "/uploads", ProfileController, :upload
 
-
+    get "/current-user", UserController, :current_user
 
     get "/logout", UserController, :logout
     get "/users", UserController, :index
