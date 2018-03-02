@@ -268,6 +268,13 @@ defmodule FacebookApp.Actions do
     query = from r in Reaction, where: r.post_id == ^post_id, select: r.user_id
     Repo.all(query)
   end
+
+  def get_reaction_by_user_post(user, post_id) do
+    query = from r in Reaction, where: r.post_id == ^post_id and r.user_id == ^user.id
+    Repo.one(query)
+  end
+
+
   @doc """
   Creates a reaction.
 
