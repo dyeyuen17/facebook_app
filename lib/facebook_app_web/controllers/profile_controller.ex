@@ -3,6 +3,7 @@ defmodule FacebookAppWeb.ProfileController do
 
   alias FacebookApp.Accounts
   alias FacebookApp.Accounts.Profile
+  alias FacebookApp.Accounts.Idcon
 
   action_fallback FacebookAppWeb.FallbackController
 
@@ -19,7 +20,7 @@ defmodule FacebookAppWeb.ProfileController do
 
   def update(conn, %{"id" => id, "profile" => profile_params}) do
     profile = Accounts.get_profile!(id)
-  
+
     with {:ok, %Profile{} = profile} <- Accounts.update_profile(profile, profile_params) do
       render(conn, "show.json", profile: profile)
     end
@@ -30,5 +31,20 @@ defmodule FacebookAppWeb.ProfileController do
     with {:ok, %Profile{}} <- Accounts.delete_profile(profile) do
       send_resp(conn, :no_content, "")
     end
+  end
+
+  def upload(conn, %{"upload" => upload}) do
+    user = conn.assigns.current_user
+    [h | _t] = Accounts.get_users_profile!(user)
+    filename = Idcon.hash_name(user.email)
+
+    extension = Path.extname(upload.filename)
+    destination = "media/avatar/#{filename}#{extension}"
+    File.rm(h.avatar)
+    File.cp(upload.path, destination)
+
+    Accounts.update_profile(h, %{avatar: destination})
+    render(conn, "show.json", profile: h)
+
   end
 end

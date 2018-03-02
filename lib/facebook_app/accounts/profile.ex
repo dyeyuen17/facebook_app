@@ -20,17 +20,35 @@ defmodule FacebookApp.Accounts.Profile do
     |> cast(attrs, [:first_name, :last_name, :avatar])
     |> validate_required([:first_name, :last_name])
     |> assoc_constraint(:user)
+  end
+
+  def registration_changeset(%Profile{} = profile, attrs) do
+    profile
+    |> cast(attrs, [:first_name, :last_name, :avatar])
+    |> validate_required([:first_name, :last_name])
+    |> assoc_constraint(:user)
     |> avatar_path(attrs)
   end
 
   defp avatar_path(changeset, attrs) do
-
     case changeset do
-      %Ecto.Changeset{valid?: true, changes: %{first_name: first_name}} ->
+      %Ecto.Changeset{valid?: true, changes: %{first_name: _first_name}} ->
         put_change(changeset, :avatar, Idcon.gen_idcon_path(attrs["email"]))
       _ ->
         changeset
     end
-
   end
+
+  defp new_upload(changeset, attrs) do
+      put_change(changeset, :avatar, attrs.avatar)
+  end
+
+  def upload_changeset(%Profile{} = profile, attrs) do
+    profile
+    |> cast(attrs, [:first_name, :last_name, :avatar])
+    |> validate_required([:first_name, :last_name])
+    |> assoc_constraint(:user)
+    |> new_upload(attrs)
+  end
+
 end

@@ -3,7 +3,6 @@ defmodule FacebookAppWeb.PostController do
 
   alias FacebookApp.Actions
   alias FacebookApp.Actions.Post
-  alias FacebookApp.Accounts
 
   action_fallback FacebookAppWeb.FallbackController
 
@@ -27,7 +26,6 @@ defmodule FacebookAppWeb.PostController do
 
   def update(conn, %{"id" => id, "post" => post_params}) do
     post = Actions.get_post!(id)
-
     with {:ok, %Post{} = post} <- Actions.update_post(post, post_params) do
       render(conn, "show.json", post: post)
     end

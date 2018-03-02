@@ -170,7 +170,7 @@ defmodule FacebookApp.Accounts do
   """
   def create_profile(attrs \\ %{}, user) do
     %Profile{user_id: user.id}
-    |> Profile.changeset(attrs)
+    |> Profile.registration_changeset(attrs)
     |> Repo.insert()
   end
 
@@ -188,9 +188,15 @@ defmodule FacebookApp.Accounts do
   """
   def update_profile(%Profile{} = profile, attrs) do
     profile
-    |> Profile.changeset(attrs)
+    |> Profile.upload_changeset(attrs)
     |> Repo.update()
   end
+  #
+  # def update_photo(path) do
+  #   %Profile{avatar: path}
+  #     |> Profile.changeset()
+  #     |> Repo.insert
+  # end
 
   @doc """
   Deletes a Profile.

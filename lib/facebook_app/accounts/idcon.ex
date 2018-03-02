@@ -13,8 +13,13 @@ defmodule  FacebookApp.Accounts.Idcon do
 		|> save_image(input)
 	end
 
+	def hash_name(filename) do
+		:crypto.hash(:md5, filename)
+			|> Base.encode16(case: :lower)
+	end
+
 	defp save_image(image, input) do
-		filename = "assets/static/images/identicons/#{:crypto.hash(:md5, input) |> Base.encode16}.png"
+		filename = "media/avatar/#{:crypto.hash(:md5, input) |> Base.encode16(case: :lower)}.png"
 		File.write(filename, image)
 		filename
 	end

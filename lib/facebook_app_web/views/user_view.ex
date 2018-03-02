@@ -2,9 +2,7 @@ defmodule FacebookAppWeb.UserView do
   use FacebookAppWeb, :view
   alias FacebookAppWeb.UserView
   alias FacebookAppWeb.PostView
-  alias FacebookAppWeb.CommentView
   alias FacebookAppWeb.ProfileView
-  alias FacebookAppWeb.ReactionView
 
   def render("index.json", %{users: users}) do
     %{data: render_many(users, UserView, "users.json")}

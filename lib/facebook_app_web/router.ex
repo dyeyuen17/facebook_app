@@ -27,6 +27,8 @@ defmodule FacebookAppWeb.Router do
 
     resources "/profile", ProfileController, except: [:new, :edit, :create]
 
+    post "/uploads", ProfileController, :upload
+
     get "/logout", UserController, :logout
     get "/users", UserController, :index
 
