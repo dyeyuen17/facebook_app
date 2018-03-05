@@ -15,28 +15,21 @@ defmodule FacebookAppWeb.ReactionController do
     user = conn.assigns.current_user
     id = post_id |> String.to_integer
     post = Actions.get_post!(id)
-
     reactions = Actions.get_users_reacted(id)
 
-
     cond do
-      Enum.empty?([post.reactions]) ->
+      Enum.member?(reactions, user.id) and !Enum.empty?([post.reactions]) ->
+        reaction = Actions.get_reaction_by_user_post(user, id)
+        with {:ok, %Reaction{} = reaction} <- Actions.update_reaction(reaction, reaction_params) do
+          render(conn, "show.json", reaction: reaction)
+        end
+      true ->
         with {:ok, %Reaction{} = reaction} <- Actions.create_reaction(reaction_params, user, id) do
           conn
           |> put_status(:created)
           |> render("show.json", reaction: reaction)
         end
-      Enum.member?(reactions, user.id) ->
-        reaction = Actions.get_reaction_by_user_post(user, id)
-
-        with {:ok, %Reaction{} = reaction} <- Actions.update_reaction(reaction, reaction_params) do
-          render(conn, "show.json", reaction: reaction)
-        end
     end
-
-
-    # require IEx
-    # IEx.pry()
 
   end
 
@@ -48,7 +41,6 @@ defmodule FacebookAppWeb.ReactionController do
 
   def update(conn, %{"id" => id, "reaction" => reaction_params}) do
     reaction = Actions.get_reaction!(id)
-
     with {:ok, %Reaction{} = reaction} <- Actions.update_reaction(reaction, reaction_params) do
       render(conn, "show.json", reaction: reaction)
     end
